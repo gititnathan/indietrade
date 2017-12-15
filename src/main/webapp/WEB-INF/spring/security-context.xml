@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=" http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/security 
+	http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<context:component-scan base-package="com.web.indietrade" use-default-filters="false">
+		<context:include-filter expression="org.springframework.stereotype.Service" type="annotation" />
+		<context:include-filter expression="org.springframework.stereotype.Repository" type="annotation" />
+	</context:component-scan>
+
+
+	<http auto-config="false" use-expressions="true" create-session="never" disable-url-rewriting="true">
+		<intercept-url pattern="/**" access="permitAll" /> <!-- 모두 허용 -->
+
+		<form-login login-page="/user_login" username-parameter="userId"
+			password-parameter="userPw" login-processing-url="/user_logina"
+			authentication-success-handler-ref="customizeAuthenticationSuccessHandler"
+			authentication-failure-handler-ref="customizeAuthenticationFailureHandler" />
+			
+		<!-- 로그아웃. . -->
+		<logout delete-cookies="true" invalidate-session="true" logout-url="/user_logouta"
+			logout-success-url="/" />
+
+
+
+		<session-management invalid-session-url="/">
+			<concurrency-control max-sessions="1" expired-url="/user_login" error-if-maximum-exceeded="true" />
+		</session-management>
+
+		<access-denied-handler ref="userDeniedHandler" />
+	</http>
+
+	<!-- 비밀번호 암호화 -->
+	<beans:bean id="bcryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+	<!-- 에러페이지 구현 -->
+	<beans:bean id="userDeniedHandler" class="com.web.security.UserDeniedHandler"></beans:bean>
+
+	<!-- loginAction 구현 -->
+	<beans:bean id="customizeUserDetailsService" class="com.web.security.UserService" />
+
+	<!-- 로그인 성공 & 실패 signinSuccess / signinFailure -->
+	<beans:bean id="customizeAuthenticationSuccessHandler"
+		class="com.web.security.CustomizeAuthenticationSuccessHandler" />
+	<beans:bean id="customizeAuthenticationFailureHandler"
+		class="com.web.security.CustomizeAuthenticationFailureHandler" />
+
+
+
+	<!-- userService 빈 등록 -->
+	<beans:bean id="userService" class="com.web.security.UserService" />
+
+	<!-- customAuthenticationProvider 빈 등록 -->
+	<beans:bean id="customAuthenticationProvider" class="com.web.security.CustomAuthenticationProvider" />
+
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="customAuthenticationProvider" />
+		<authentication-provider user-service-ref="userService">
+
+		</authentication-provider>
+
+	</authentication-manager>
+	
+	
+</beans:beans>
+
+

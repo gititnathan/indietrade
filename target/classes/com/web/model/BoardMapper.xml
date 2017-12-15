@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.model">
+	
+	<select id="listBoard" resultType="BoardDBBean">
+		select * from indie_board order by albumnum asc;
+	</select>
+  
+  	<insert id="insertBoard" parameterType="BoardDBBean">
+  		insert into indie_board values(indie_board_seq.nextval, 
+  		 #{albumName}, #{artistName}, sysdate,  #{mvlink})
+  	</insert>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.model">
+
+	<insert id="insertCategory" parameterType="CategoryDBBean">
+		insert into
+		indietrade_category values (
+		indietrade_category_seq.nextval,
+		#{majorCategories}, #{subCategories}
+		)
+	</insert>
+
+	<select id="listCategory" resultType="CategoryDBBean">
+		select * from
+		indietrade_category order by num desc
+	</select>
+
+	<select id="getCategory" resultType="CategoryDBBean"
+		parameterType="int">
+		select * from indietrade_category where num = #{num}
+	</select>
+
+	<update id="updateCategory" parameterType="CategoryDBBean">
+		update indietrade_category set
+		majorcategories = ${majorCategories},
+		subcategories = ${subCategories}
+		where
+		num = ${num}
+	</update>
+	
+	<delete id="deleteCategory" parameterType="int">
+		delete from indietrade_category
+		where num = #{num}
+	</delete>
+
+	
+
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.web.model">
+
+	<insert id="insertUser" parameterType="UserDBBean">
+		insert into indietrade_user values(indietrade_user_seq.nextval, #{id}, #{name},
+		#{email}, #{passwd}, #{birth}, #{gender}, #{phone}, #{grade}, sysdate, #{ip}, #{filename}, #{filesize}, #{authority}, 'N')
+	</insert>
+	
+	<select id="checkId" parameterType="UserDBBean" resultType="java.lang.Integer">
+    	SELECT NVL(COUNT(*),0) FROM indietrade_user WHERE ID=#{id}
+	</select>
+	<select id="checkEmail" parameterType="UserDBBean" resultType="java.lang.Integer">
+    	SELECT NVL(COUNT(*),0) FROM indietrade_user WHERE EMAIL=#{email}
+	</select>
+	<select id="checkPhone" parameterType="UserDBBean" resultType="java.lang.Integer">
+    	SELECT NVL(COUNT(*),0) FROM indietrade_user WHERE PHONE=#{phone} 
+	</select>
+	
+	<select id="checkNBE" parameterType="UserDBBean" resultType="java.lang.Integer">
+    	SELECT NVL(COUNT(*),0) FROM indietrade_user WHERE NAME=#{name} and BIRTH=#{birth} and EMAIL=#{email}
+	</select>
+	<select id="checkIE" parameterType="UserDBBean" resultType="java.lang.Integer">
+    	SELECT NVL(COUNT(*),0) FROM indietrade_user WHERE ID=#{id} and EMAIL=#{email}
+	</select>
+	
+	<update id="updatePassword" parameterType="UserDBBean">
+		UPDATE indietrade_user set PASSWD=#{passwd} where ID=#{id}
+	</update>
+	
+	<update id="updateEmailAuth" parameterType="UserDBBean">
+		UPDATE indietrade_user set EMAILAUTH='Y' where ID=#{id}
+	</update>
+	
+	<select id="getMember" resultType="UserDBBean" parameterType="String">
+    	select * from indietrade_user where EMAIL=#{email}
+  	</select>
+  	
+  	<select id="getMember_username" resultType="UserDBBean" parameterType="String">
+    	select * from indietrade_user where id=#{username}
+  	</select>
+  	
+  	<select id="getMember_login" resultType="UserDBBean" parameterType="String">
+    	select * from indietrade_user where ID = #{id, jdbcType=VARCHAR}
+ 
+  	</select>
+  	
+  	<select id="loginCheck"  resultType="String" parameterType="UserDBBean">
+  		
+        SELECT name FROM indietrade_user WHERE ID = #{id, jdbcType=VARCHAR} AND PASSWD = #{passwd, jdbcType=VARCHAR}
+    </select>
+  
+</mapper>	

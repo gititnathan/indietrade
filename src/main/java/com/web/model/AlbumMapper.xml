@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.web.model">
+	
+	<select id="listAlbum" resultType="AlbumDBBean">
+		select * from indie_album
+	</select>
+  
+  	<insert id="insertAlbum" parameterType="AlbumDBBean">
+  		insert into indie_album values(indie_album_seq.nextval, 
+  		#{artistnum}, #{albumtitle}, #{genre}, #{musicFiles}, #{mvLink}, #{albumDesc}, 0, 0, 0, sysdate,  #{contributor},  #{albumImage})
+  	</insert>
+  	<select id="getAlbum" resultType="AlbumDBBean" parameterType="int">
+		select * from indie_album where albumnum = #{albumnum}
+	</select>
+	<delete id="deleteAlbum" parameterType="int">
+	delete from indie_album where albumnum = #{albumnum} 
+	</delete>
+	<update id="readcount" parameterType="int">
+		update indie_album set readcount=readcount+1 where albumnum=#{albumnum}
+	</update>  
+	<update id="updateAlbum" parameterType="AlbumDBBean">
+	update indie_album set albumitle = #{albumtitle}, genre = #{genre}, musicFiles = #{musicFiles}, mvLink = #{mvLink}, albmDesc= #{albumDesc}, contributor= #{contributor}, albumimage= #{albumimage} where albumnum = #{albumnum} 
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
